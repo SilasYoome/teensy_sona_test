@@ -37,7 +37,7 @@ void sona_rs485::get_data(unsigned char* sona_data_buffer){
    digitalWrite(cs_pin,LOW);
    int sona_data_flag = 0;
    while(Serial2.available()){
-      //Serial.println("have read");
+      Serial.println("have read");
       sona_data[sona_data_flag] = Serial2.read();
       // 標頭確認
       if(sona_data_flag == 1 && sona_data[sona_data_flag - 1] != head1 && sona_data[sona_data_flag] != head2)
