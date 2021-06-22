@@ -13,20 +13,20 @@ void sona_rs485::init(){
    command_data[2] = address; // 命令第三個位置放address
 }
 
-int sona_rs485::checksum(int *buf,int len){
-   int sum;
-
+int sona_rs485::checksum(uint8_t *buf,int len){
+   uint8_t sum = 0;
+   
    for(int i=0;i<len-1;i++){
       sum += *buf++;
    }
 
-   return sum & 0xFF;
+   return sum;
 }
 
 void sona_rs485::send_command(int command){
    digitalWrite(cs_pin,HIGH);
    command_data[3] = command; // 命令第四個位置放命令的編號
-   command_data[4] = checksum(command_data,sizeof(command_data));
+   command_data[4] = checksum(command_data,sizeof(command_data)/sizeof(command_data[0]));
 
    for(int i=0;i<5;i++){
       Serial2.write(command_data[i]);
@@ -37,6 +37,7 @@ void sona_rs485::get_data(unsigned char* sona_data_buffer){
    digitalWrite(cs_pin,LOW);
    int sona_data_flag = 0;
    while(Serial2.available()){
+      //Serial.println("have read");
       sona_data[sona_data_flag] = Serial2.read();
       // 標頭確認
       if(sona_data_flag == 1 && sona_data[sona_data_flag - 1] != head1 && sona_data[sona_data_flag] != head2)

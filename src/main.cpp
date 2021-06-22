@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "sona_rs485.h"
-sona_rs485 sona(4);
-unsigned char data[13];
+sona_rs485 sona(5);
+uint8_t data[13];
 void setup() {
     sona.init();
 }
@@ -18,10 +18,15 @@ void loop() {
     sona.send_command(0x01);
     command_time = millis();
     still_command = true;
-  }else if(millis()-command_time >= 10 && still_command == true){
+  }else if(millis()-command_time >= 50 && still_command == true){
     Serial.println("2");
     Serial.println(millis());
     sona.get_data(data);
+    for(int i = 0 ;i<13;i++){
+      Serial.print(data[i]);
+      Serial.print(" ");
+    }
+    Serial.println();
     still_command=false;
   }
 }
