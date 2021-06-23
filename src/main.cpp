@@ -18,7 +18,7 @@ void loop() {
     sona.send_command(0x01);
     command_time = millis();
     still_command = true;
-  }else if(millis()-command_time >= 100 && still_command == true){
+  }else if(millis()-command_time >= 50 && still_command == true){
     Serial.println("2");
     Serial.println(millis());
     sona.get_data(data);
